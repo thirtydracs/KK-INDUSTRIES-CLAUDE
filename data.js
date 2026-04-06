@@ -1,349 +1,91 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>K&K Industries Hub</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg:       #0b1120;
-      --surface:  #141e30;
-      --surface2: #1a2540;
-      --border:   #1f2f4a;
-      --text:     #e2e8f0;
-      --muted:    #64748b;
-      --secondary:#94a3b8;
+DOCTYPconst jobs = [
+  {
+    id: "caltex",
+    name: "Caltex D'Aguilar",
+    status: "red",
+    issue: "Behind programme",
+    labour: "Adequate",
+    criticalPath: "Civil works",
+    holdingUp: "Job marked behind; no clear recovery actions logged",
+    reality: "Civil works are active with PGE and Virgil onsite, and sediment fencing completed, but the job is still recorded as behind.",
+    next: "Confirm recovery plan, define critical path item, and tighten daily structured logging.",
+    week: "Week Ending 2 April 2026",
+    dataConfidence: "Medium",
+    activity: [
+      {
+        day: "Thursday",
+        text: "PGE with 3 men and Virgil with 2 men onsite. Sediment fencing completed. Programme status recorded as Behind."
+      }
+    ]
+  },
+  {
+    id: "childers",
+    name: "Pearl Energy Childers",
+    status: "amber",
+    issue: "Thin labour",
+    labour: "Insufficient",
+    criticalPath: "Concreting start / slab prep",
+    holdingUp: "Low labour depth ahead of concreter start",
+    reality: "Site is tracking, but mostly on one operator through the week. Prep works progressed and Brucon was confirmed to start 7/4/26, but the job is fragile if labour stays thin.",
+    next: "Lock concreter start, increase labour support, and keep slab and panel prep moving cleanly.",
+    week: "Week Ending 2 April 2026",
+    dataConfidence: "Good",
+    activity: [
+      {
+        day: "Monday",
+        text: "Surveyors completed final mark-up of slab set-outs and gridlines. Structured fields mostly N/A on this entry."
+      },
+      {
+        day: "Tuesday",
+        text: "Red Dirt Civil had 1 man onsite, arriving late at 15:00. Started sieving excess material and removing debris."
+      },
+      {
+        day: "Wednesday",
+        text: "Red Dirt Civil had 1 man onsite for 9 hours. Completed 90% of sieving stockpiled material as planned."
+      },
+      {
+        day: "Thursday",
+        text: "Red Dirt Civil had 1 man onsite for 2.5 hours. Completed works and Brucon confirmed start for 7/4/26."
+      }
+    ]
+  },
+  {
+    id: "williamstown",
+    name: "Exus Williamstown",
+    status: "grey",
+    issue: "Blind spot / weak structured data",
+    labour: "Active trades onsite",
+    criticalPath: "Cladding",
+    holdingUp: "No structured programme detail recorded",
+    reality: "B&M and roofer were onsite for cladding-related work, but almost every structured field is N/A, so true project position cannot be confirmed.",
+    next: "Complete programme status, work area, completed works, and next-day plan in daily logs.",
+    week: "Week Ending 30 March 2026",
+    dataConfidence: "Low",
+    activity: [
+      {
+        day: "Monday",
+        text: "B&M x4 and roofer x1 onsite. Cladding-related activity recorded, but structured fields are mostly blank."
+      }
+    ]
+  },
+  {
+    id: "emerald",
+    name: "Pearl Energy Emerald",
+    status: "grey",
+    issue: "No daily logs available",
+    labour: "Unknown",
+    criticalPath: "Unknown",
+    holdingUp: "No results in uploaded log file",
+    reality: "No daily logs were available in the uploaded Emerald PDF, so the job position cannot be assessed.",
+    next: "Export and upload valid Emerald daily logs before reporting.",
+    week: "Week Ending 6 April 2026",
+    dataConfidence: "Low",
+    activity: [
+      {
+        day: "Current",
+        text: "No results shown in uploaded daily logs export."
+      }
+    ]
+  }
+];
 
-      --red:        #ef4444;
-      --red-bg:     rgba(239,68,68,0.12);
-      --red-text:   #fca5a5;
-
-      --amber:      #f59e0b;
-      --amber-bg:   rgba(245,158,11,0.12);
-      --amber-text: #fcd34d;
-
-      --green:      #22c55e;
-      --green-bg:   rgba(34,197,94,0.12);
-      --green-text: #86efac;
-
-      --grey:       #64748b;
-      --grey-bg:    rgba(100,116,139,0.12);
-      --grey-text:  #cbd5e1;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Outfit', Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      padding: 20px 16px 48px;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
-      background-size: 48px 48px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .wrap {
-      max-width: 900px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* BACK LINK */
-    .back {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 16px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 13px;
-      color: var(--muted);
-      transition: color 0.15s;
-    }
-
-    .back:hover { color: var(--text); }
-
-    /* TOP HEADER CARD */
-    .top {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-left: 4px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 12px;
-    }
-
-    .top.red   { border-left-color: var(--red);   }
-    .top.amber { border-left-color: var(--amber);  }
-    .top.green { border-left-color: var(--green);  }
-    .top.grey  { border-left-color: var(--grey);   }
-
-    .top-meta {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 5px 10px;
-      border-radius: 6px;
-      font-weight: 700;
-      text-transform: uppercase;
-      font-size: 11px;
-      letter-spacing: 0.06em;
-    }
-
-    .badge.red   { background: var(--red-bg);   color: var(--red-text);   }
-    .badge.amber { background: var(--amber-bg); color: var(--amber-text); }
-    .badge.green { background: var(--green-bg); color: var(--green-text); }
-    .badge.grey  { background: var(--grey-bg);  color: var(--grey-text);  }
-
-    .week {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    h1 {
-      font-size: 26px;
-      font-weight: 700;
-    }
-
-    /* CARDS */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 20px;
-      margin-bottom: 12px;
-    }
-
-    .card-heading {
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--muted);
-      margin-bottom: 18px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    /* 2-col field grid */
-    .fields {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px 32px;
-    }
-
-    .field.full { grid-column: 1 / -1; }
-
-    .label {
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      margin-bottom: 5px;
-    }
-
-    .value {
-      font-size: 15px;
-      line-height: 1.55;
-      color: var(--secondary);
-    }
-
-    /* DATA CONFIDENCE BADGE */
-    .confidence-badge {
-      display: inline-block;
-      padding: 5px 11px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-    }
-
-    .confidence-badge.good   { background: var(--green-bg); color: var(--green-text); }
-    .confidence-badge.medium { background: var(--amber-bg); color: var(--amber-text); }
-    .confidence-badge.low    { background: var(--red-bg);   color: var(--red-text);   }
-
-    /* ACTIVITY TIMELINE */
-    .activity-list { display: flex; flex-direction: column; }
-
-    .day {
-      display: flex;
-      gap: 20px;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .day:last-child { border-bottom: none; padding-bottom: 0; }
-    .day:first-child { padding-top: 0; }
-
-    .day-name {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      color: var(--muted);
-      min-width: 76px;
-      padding-top: 2px;
-      flex-shrink: 0;
-    }
-
-    .day-text {
-      font-size: 14px;
-      color: var(--secondary);
-      line-height: 1.5;
-    }
-
-    .not-found {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 32px;
-    }
-
-    @media (max-width: 640px) {
-      body { padding: 12px 12px 32px; }
-      .top, .card { padding: 16px; }
-      h1 { font-size: 22px; }
-      .fields { grid-template-columns: 1fr; }
-      .field.full { grid-column: 1; }
-      .day { flex-direction: column; gap: 6px; }
-      .day-name { min-width: auto; }
-    }
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <a class="back" href="../index.html">← Back to Hub</a>
-
-    <div class="top" id="topCard">
-      <div class="top-meta">
-        <div id="statusBadge" class="badge">—</div>
-        <div class="week" id="week"></div>
-      </div>
-      <h1 id="jobName">—</h1>
-    </div>
-
-    <div class="card">
-      <div class="card-heading">Site Status</div>
-      <div class="fields">
-        <div class="field">
-          <div class="label">Issue</div>
-          <div class="value" id="issue"></div>
-        </div>
-        <div class="field">
-          <div class="label">Labour</div>
-          <div class="value" id="labour"></div>
-        </div>
-        <div class="field">
-          <div class="label">Critical Path</div>
-          <div class="value" id="criticalPath"></div>
-        </div>
-        <div class="field full">
-          <div class="label">Holding Up</div>
-          <div class="value" id="holdingUp"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-heading">Assessment</div>
-      <div class="fields">
-        <div class="field full">
-          <div class="label">Reality</div>
-          <div class="value" id="reality"></div>
-        </div>
-        <div class="field full">
-          <div class="label">Next</div>
-          <div class="value" id="next"></div>
-        </div>
-        <div class="field">
-          <div class="label">Data Confidence</div>
-          <div class="value"><span class="confidence-badge" id="dataConfidence"></span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-heading">Week Activity</div>
-      <div class="activity-list" id="activity"></div>
-    </div>
-  </div>
-
-  <script src="../data.js"></script>
-  <script>
-    function niceStatus(s) {
-      return { red:"At Risk", amber:"Watch", green:"On Track", grey:"Blind Spot" }[s] || s;
-    }
-
-    function confidenceClass(c) {
-      if (!c) return "";
-      return { good:"good", medium:"medium", low:"low" }[c.toLowerCase()] || "";
-    }
-
-    const params = new URLSearchParams(window.location.search);
-    const id  = params.get("id");
-    const job = jobs.find(j => j.id === id);
-
-    if (!job) {
-      document.querySelector(".wrap").innerHTML = `
-        <div class="not-found">
-          <h2 style="margin-bottom:10px;">Job not found</h2>
-          <p style="color:var(--muted); margin-bottom:16px;">Check the link and try again.</p>
-          <a class="back" href="../index.html">← Back to Hub</a>
-        </div>
-      `;
-    } else {
-      document.title = job.name + " — K&K Industries Hub";
-
-      document.getElementById("jobName").textContent = job.name;
-      document.getElementById("week").textContent    = job.week || "";
-
-      const badge = document.getElementById("statusBadge");
-      badge.textContent = niceStatus(job.status);
-      badge.classList.add(job.status);
-
-      document.getElementById("topCard").classList.add(job.status);
-
-      document.getElementById("issue").textContent        = job.issue        || "—";
-      document.getElementById("holdingUp").textContent    = job.holdingUp    || "—";
-      document.getElementById("labour").textContent       = job.labour       || "—";
-      document.getElementById("criticalPath").textContent = job.criticalPath || "—";
-      document.getElementById("reality").textContent      = job.reality      || "—";
-      document.getElementById("next").textContent         = job.next         || "—";
-
-      const confEl = document.getElementById("dataConfidence");
-      confEl.textContent = job.dataConfidence || "Unknown";
-      confEl.classList.add(confidenceClass(job.dataConfidence));
-
-      const activityWrap = document.getElementById("activity");
-      const items = job.activity || [];
-
-      activityWrap.innerHTML = items.length === 0
-        ? `<div class="day"><div class="day-text">No activity logged.</div></div>`
-        : items.map(item => `
-            <div class="day">
-              <div class="day-name">${item.day}</div>
-              <div class="day-text">${item.text}</div>
-            </div>
-          `).join("");
-    }
-  </script>
-</body>
-</html>
