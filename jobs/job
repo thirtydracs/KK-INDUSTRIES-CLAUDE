@@ -1,164 +1,230 @@
-<!DOCTYPE html>
+DOCTYPE html>
 <html>
 <head>
-  <!-- FIX: Page title updated dynamically via JS below -->
-  <title>K&amp;K Industries Hub</title>
+  <title>K&K Industries Hub</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg:       #0b1120;
+      --surface:  #141e30;
+      --surface2: #1a2540;
+      --border:   #1f2f4a;
+      --text:     #e2e8f0;
+      --muted:    #64748b;
+      --secondary:#94a3b8;
+
+      --red:        #ef4444;
+      --red-bg:     rgba(239,68,68,0.12);
+      --red-text:   #fca5a5;
+
+      --amber:      #f59e0b;
+      --amber-bg:   rgba(245,158,11,0.12);
+      --amber-text: #fcd34d;
+
+      --green:      #22c55e;
+      --green-bg:   rgba(34,197,94,0.12);
+      --green-text: #86efac;
+
+      --grey:       #64748b;
+      --grey-bg:    rgba(100,116,139,0.12);
+      --grey-text:  #cbd5e1;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
-      margin: 0;
-      padding: 16px;
-      color: #1f2933;
+      font-family: 'Outfit', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 20px 16px 48px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
     }
 
     .wrap {
       max-width: 900px;
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
 
-    /* FIX: Top header section gets status-coloured left border to match index cards */
-    .top {
-      background: white;
-      border-radius: 14px;
-      padding: 18px;
+    /* BACK LINK */
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       margin-bottom: 16px;
-      border-left: 6px solid #e5e7eb;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--muted);
+      transition: color 0.15s;
     }
 
-    .top.red   { border-left-color: #dc2626; }
-    .top.amber { border-left-color: #f59e0b; }
-    .top.green { border-left-color: #16a34a; }
-    .top.grey  { border-left-color: #6b7280; }
+    .back:hover { color: var(--text); }
 
-    h1 {
-      margin: 0 0 8px;
-      font-size: 28px;
+    /* TOP HEADER CARD */
+    .top {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 12px;
     }
 
-    .week {
-      color: #6b7280;
-      font-size: 14px;
+    .top.red   { border-left-color: var(--red);   }
+    .top.amber { border-left-color: var(--amber);  }
+    .top.green { border-left-color: var(--green);  }
+    .top.grey  { border-left-color: var(--grey);   }
+
+    .top-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       margin-bottom: 10px;
     }
 
     .badge {
       display: inline-block;
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-weight: 700;
       text-transform: uppercase;
-      font-size: 12px;
-    }
-
-    .badge.red   { background: #fee2e2; color: #991b1b; }
-    .badge.amber { background: #fef3c7; color: #92400e; }
-    .badge.green { background: #dcfce7; color: #166534; }
-    .badge.grey  { background: #e5e7eb; color: #374151; }
-
-    .card {
-      background: white;
-      border-radius: 14px;
-      padding: 18px;
-      margin-bottom: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    }
-
-    /* FIX: Card section heading for grouped cards */
-    .card-heading {
       font-size: 11px;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #9ca3af;
-      margin-bottom: 16px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #f3f4f6;
+      letter-spacing: 0.06em;
     }
+
+    .badge.red   { background: var(--red-bg);   color: var(--red-text);   }
+    .badge.amber { background: var(--amber-bg); color: var(--amber-text); }
+    .badge.green { background: var(--green-bg); color: var(--green-text); }
+    .badge.grey  { background: var(--grey-bg);  color: var(--grey-text);  }
+
+    .week {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 12px;
+    }
+
+    .card-heading {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* 2-col field grid */
+    .fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px 32px;
+    }
+
+    .field.full { grid-column: 1 / -1; }
 
     .label {
-      font-size: 12px;
+      font-size: 10px;
+      font-weight: 700;
       text-transform: uppercase;
-      color: #6b7280;
-      margin-bottom: 4px;
-      font-weight: bold;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 5px;
     }
 
     .value {
-      font-size: 17px;
-      line-height: 1.5;
-      margin-bottom: 18px;
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--secondary);
     }
 
-    .value:last-child {
-      margin-bottom: 0;
-    }
-
-    /* FIX: Data Confidence badge styling */
+    /* DATA CONFIDENCE BADGE */
     .confidence-badge {
       display: inline-block;
-      padding: 5px 10px;
-      border-radius: 999px;
+      padding: 5px 11px;
+      border-radius: 6px;
       font-size: 13px;
-      font-weight: bold;
+      font-weight: 700;
+      letter-spacing: 0.04em;
     }
 
-    .confidence-badge.good   { background: #dcfce7; color: #166534; }
-    .confidence-badge.medium { background: #fef3c7; color: #92400e; }
-    .confidence-badge.low    { background: #fee2e2; color: #991b1b; }
+    .confidence-badge.good   { background: var(--green-bg); color: var(--green-text); }
+    .confidence-badge.medium { background: var(--amber-bg); color: var(--amber-text); }
+    .confidence-badge.low    { background: var(--red-bg);   color: var(--red-text);   }
+
+    /* ACTIVITY TIMELINE */
+    .activity-list { display: flex; flex-direction: column; }
 
     .day {
-      padding: 12px 0;
-      border-top: 1px solid #e5e7eb;
-      line-height: 1.5;
+      display: flex;
+      gap: 20px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
     }
 
-    .day:first-child {
-      border-top: none;
-      padding-top: 0;
-    }
+    .day:last-child { border-bottom: none; padding-bottom: 0; }
+    .day:first-child { padding-top: 0; }
 
-    .day-label {
-      font-weight: bold;
-      font-size: 14px;
-      color: #374151;
-      margin-bottom: 4px;
+    .day-name {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+      min-width: 76px;
+      padding-top: 2px;
+      flex-shrink: 0;
     }
 
     .day-text {
-      font-size: 15px;
-      color: #1f2933;
-    }
-
-    .back {
-      display: inline-block;
-      margin-bottom: 14px;
-      text-decoration: none;
-      font-weight: bold;
-      color: #0f62fe;
-    }
-
-    .back:hover {
-      text-decoration: underline;
+      font-size: 14px;
+      color: var(--secondary);
+      line-height: 1.5;
     }
 
     .not-found {
-      background: white;
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 18px;
+      padding: 32px;
     }
 
     @media (max-width: 640px) {
-      body { padding: 12px; }
-
-      .top,
-      .card,
-      .not-found { padding: 16px; }
-
-      h1 { font-size: 24px; }
-
-      .value { font-size: 16px; }
+      body { padding: 12px 12px 32px; }
+      .top, .card { padding: 16px; }
+      h1 { font-size: 22px; }
+      .fields { grid-template-columns: 1fr; }
+      .field.full { grid-column: 1; }
+      .day { flex-direction: column; gap: 6px; }
+      .day-name { min-width: auto; }
     }
   </style>
 </head>
@@ -167,124 +233,119 @@
     <a class="back" href="../index.html">← Back to Hub</a>
 
     <div class="top" id="topCard">
-      <h1 id="jobName">Job</h1>
-      <div class="week" id="week"></div>
-      <div id="statusBadge" class="badge">Status</div>
+      <div class="top-meta">
+        <div id="statusBadge" class="badge">—</div>
+        <div class="week" id="week"></div>
+      </div>
+      <h1 id="jobName">—</h1>
     </div>
 
-    <!-- FIX: Split into two logical cards — Status card + Assessment card -->
     <div class="card">
       <div class="card-heading">Site Status</div>
-
-      <div class="label">Issue</div>
-      <div class="value" id="issue"></div>
-
-      <div class="label">Holding Up</div>
-      <div class="value" id="holdingUp"></div>
-
-      <div class="label">Labour</div>
-      <div class="value" id="labour"></div>
-
-      <div class="label">Critical Path</div>
-      <div class="value" id="criticalPath"></div>
+      <div class="fields">
+        <div class="field">
+          <div class="label">Issue</div>
+          <div class="value" id="issue"></div>
+        </div>
+        <div class="field">
+          <div class="label">Labour</div>
+          <div class="value" id="labour"></div>
+        </div>
+        <div class="field">
+          <div class="label">Critical Path</div>
+          <div class="value" id="criticalPath"></div>
+        </div>
+        <div class="field full">
+          <div class="label">Holding Up</div>
+          <div class="value" id="holdingUp"></div>
+        </div>
+      </div>
     </div>
 
     <div class="card">
       <div class="card-heading">Assessment</div>
-
-      <div class="label">Reality</div>
-      <div class="value" id="reality"></div>
-
-      <div class="label">Next</div>
-      <div class="value" id="next"></div>
-
-      <div class="label">Data Confidence</div>
-      <!-- FIX: Data Confidence rendered as coloured badge -->
-      <div class="value"><span class="confidence-badge" id="dataConfidence"></span></div>
+      <div class="fields">
+        <div class="field full">
+          <div class="label">Reality</div>
+          <div class="value" id="reality"></div>
+        </div>
+        <div class="field full">
+          <div class="label">Next</div>
+          <div class="value" id="next"></div>
+        </div>
+        <div class="field">
+          <div class="label">Data Confidence</div>
+          <div class="value"><span class="confidence-badge" id="dataConfidence"></span></div>
+        </div>
+      </div>
     </div>
 
     <div class="card">
       <div class="card-heading">Week Activity</div>
-      <div id="activity"></div>
+      <div class="activity-list" id="activity"></div>
     </div>
   </div>
 
   <script src="../data.js"></script>
   <script>
-    // Shared status label function
-    function niceStatus(status) {
-      if (status === "red")   return "At Risk";
-      if (status === "amber") return "Watch";
-      if (status === "green") return "On Track";
-      if (status === "grey")  return "Blind Spot";
-      return status;
+    function niceStatus(s) {
+      return { red:"At Risk", amber:"Watch", green:"On Track", grey:"Blind Spot" }[s] || s;
     }
 
-    // FIX: Data confidence to CSS class
-    function confidenceClass(confidence) {
-      if (!confidence) return "";
-      const val = confidence.toLowerCase();
-      if (val === "good")   return "good";
-      if (val === "medium") return "medium";
-      if (val === "low")    return "low";
-      return "";
+    function confidenceClass(c) {
+      if (!c) return "";
+      return { good:"good", medium:"medium", low:"low" }[c.toLowerCase()] || "";
     }
 
     const params = new URLSearchParams(window.location.search);
-    const id = params.get("id");
+    const id  = params.get("id");
     const job = jobs.find(j => j.id === id);
 
     if (!job) {
       document.querySelector(".wrap").innerHTML = `
         <div class="not-found">
-          <h2>Job not found</h2>
-          <p>Check the link and try again.</p>
+          <h2 style="margin-bottom:10px;">Job not found</h2>
+          <p style="color:var(--muted); margin-bottom:16px;">Check the link and try again.</p>
           <a class="back" href="../index.html">← Back to Hub</a>
         </div>
       `;
     } else {
-      // FIX: Dynamic page title
       document.title = job.name + " — K&K Industries Hub";
 
       document.getElementById("jobName").textContent = job.name;
-      document.getElementById("week").textContent = job.week || "";
+      document.getElementById("week").textContent    = job.week || "";
 
-      // FIX: Status badge shows human-readable label, not raw string
       const badge = document.getElementById("statusBadge");
       badge.textContent = niceStatus(job.status);
       badge.classList.add(job.status);
 
-      // FIX: Top card gets matching coloured border
       document.getElementById("topCard").classList.add(job.status);
 
-      document.getElementById("issue").textContent        = job.issue || "";
-      document.getElementById("holdingUp").textContent    = job.holdingUp || "";
-      document.getElementById("labour").textContent       = job.labour || "";
-      document.getElementById("criticalPath").textContent = job.criticalPath || "";
-      document.getElementById("reality").textContent      = job.reality || "";
-      document.getElementById("next").textContent         = job.next || "";
+      document.getElementById("issue").textContent        = job.issue        || "—";
+      document.getElementById("holdingUp").textContent    = job.holdingUp    || "—";
+      document.getElementById("labour").textContent       = job.labour       || "—";
+      document.getElementById("criticalPath").textContent = job.criticalPath || "—";
+      document.getElementById("reality").textContent      = job.reality      || "—";
+      document.getElementById("next").textContent         = job.next         || "—";
 
-      // FIX: Data Confidence as coloured badge
       const confEl = document.getElementById("dataConfidence");
       confEl.textContent = job.dataConfidence || "Unknown";
       confEl.classList.add(confidenceClass(job.dataConfidence));
 
-      // Activity log
       const activityWrap = document.getElementById("activity");
       const items = job.activity || [];
 
-      if (items.length === 0) {
-        activityWrap.innerHTML = `<div class="day"><div class="day-text">No activity logged.</div></div>`;
-      } else {
-        activityWrap.innerHTML = items.map(item => `
-          <div class="day">
-            <div class="day-label">${item.day}</div>
-            <div class="day-text">${item.text}</div>
-          </div>
-        `).join("");
-      }
+      activityWrap.innerHTML = items.length === 0
+        ? `<div class="day"><div class="day-text">No activity logged.</div></div>`
+        : items.map(item => `
+            <div class="day">
+              <div class="day-name">${item.day}</div>
+              <div class="day-text">${item.text}</div>
+            </div>
+          `).join("");
     }
   </script>
 </body>
 </html>
+
 
