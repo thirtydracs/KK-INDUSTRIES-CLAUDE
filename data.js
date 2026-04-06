@@ -1,4 +1,4 @@
-DOCTYPconst jobs = [
+const jobs = [
   {
     id: "caltex",
     name: "Caltex D'Aguilar",
@@ -88,4 +88,3 @@ DOCTYPconst jobs = [
     ]
   }
 ];
-
