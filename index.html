@@ -3,244 +3,329 @@
 <head>
   <title>K&K Industries Hub</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg:       #0b1120;
+      --surface:  #141e30;
+      --surface2: #1a2540;
+      --border:   #1f2f4a;
+      --text:     #e2e8f0;
+      --muted:    #64748b;
+      --secondary:#94a3b8;
+
+      --red:        #ef4444;
+      --red-bg:     rgba(239,68,68,0.12);
+      --red-text:   #fca5a5;
+
+      --amber:      #f59e0b;
+      --amber-bg:   rgba(245,158,11,0.12);
+      --amber-text: #fcd34d;
+
+      --green:      #22c55e;
+      --green-bg:   rgba(34,197,94,0.12);
+      --green-text: #86efac;
+
+      --grey:       #64748b;
+      --grey-bg:    rgba(100,116,139,0.12);
+      --grey-text:  #cbd5e1;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
-      margin: 0;
-      padding: 16px;
-      color: #1f2933;
+      font-family: 'Outfit', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 20px 16px 48px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
     }
 
     .wrap {
       max-width: 1000px;
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
 
+    /* TOPBAR */
     .topbar {
-      background: white;
-      border-radius: 14px;
-      padding: 18px;
-      margin-bottom: 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 14px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .brand-mark {
+      background: var(--amber);
+      color: #0b1120;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 5px 10px;
+      border-radius: 7px;
+      letter-spacing: 0.06em;
+      flex-shrink: 0;
     }
 
     h1 {
-      margin: 0 0 8px;
-      font-size: 28px;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1;
     }
 
     .sub {
-      color: #6b7280;
-      font-size: 14px;
-      margin-bottom: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 20px;
     }
 
-    /* FIX: Counts now show filtered results separately from totals */
+    /* COUNTS */
     .counts {
-      font-weight: bold;
-      margin-bottom: 14px;
-      line-height: 1.5;
-      font-size: 14px;
-      color: #374151;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      font-size: 13px;
     }
 
-    .counts .counts-total {
-      color: #6b7280;
-      font-weight: normal;
-      margin-left: 8px;
+    .count-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--secondary);
+    }
+
+    .count-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .count-dot.red   { background: var(--red); }
+    .count-dot.amber { background: var(--amber); }
+    .count-dot.green { background: var(--green); }
+    .count-dot.grey  { background: var(--grey); }
+    .count-num { color: var(--text); font-weight: 700; }
+
+    /* CONTROLS */
+    .controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
     }
 
     .filters {
       display: flex;
-      gap: 8px;
+      gap: 3px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
       flex-wrap: wrap;
-      margin-bottom: 12px;
     }
 
     .filters button {
       border: none;
-      border-radius: 999px;
-      padding: 10px 14px;
-      font-weight: bold;
+      border-radius: 7px;
+      padding: 8px 13px;
+      font-weight: 600;
+      font-size: 13px;
       cursor: pointer;
-      background: #e5e7eb;
-      color: #1f2933;
+      background: transparent;
+      color: var(--muted);
       transition: background 0.15s, color 0.15s;
+      font-family: 'Outfit', Arial, sans-serif;
     }
 
-    .filters button:hover {
-      background: #d1d5db;
-    }
+    .filters button:hover  { background: var(--surface2); color: var(--text); }
+    .filters button.active { background: var(--surface2); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.4); }
 
-    /* FIX: Active filter button state */
-    .filters button.active {
-      background: #1f2933;
-      color: white;
-    }
-
-    /* FIX: Search wrapper for clear button */
     .search-wrap {
       position: relative;
-      display: inline-block;
-      width: 100%;
-      max-width: 320px;
+      flex: 1;
+      max-width: 280px;
     }
 
     .search {
       width: 100%;
-      padding: 10px 36px 10px 12px;
-      border-radius: 10px;
-      border: 1px solid #d1d5db;
-      font-size: 15px;
-      box-sizing: border-box;
+      padding: 9px 34px 9px 13px;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      font-size: 14px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', Arial, sans-serif;
     }
 
-    /* FIX: Search clear button */
+    .search::placeholder { color: var(--muted); }
+    .search:focus { outline: none; border-color: #334155; }
+
     .search-clear {
       position: absolute;
-      right: 10px;
-      top: 50%;
+      right: 10px; top: 50%;
       transform: translateY(-50%);
-      background: none;
-      border: none;
+      background: none; border: none;
       cursor: pointer;
-      color: #9ca3af;
-      font-size: 16px;
-      padding: 0;
-      line-height: 1;
+      color: var(--muted);
+      font-size: 14px; padding: 0; line-height: 1;
       display: none;
     }
 
-    .search-clear.visible {
-      display: block;
-    }
+    .search-clear.visible { display: block; }
+    .search-clear:hover   { color: var(--text); }
 
-    .search-clear:hover {
-      color: #1f2933;
-    }
+    /* JOBS */
+    .jobs { display: grid; gap: 10px; }
 
-    .jobs {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-
+    /* CARD */
     .card {
-      background: white;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid;
       border-radius: 14px;
-      padding: 18px;
+      padding: 20px;
       text-decoration: none;
       color: inherit;
       display: block;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      /* FIX: Hover affordance */
-      transition: box-shadow 0.15s ease, transform 0.15s ease;
-      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
     }
 
-    /* FIX: Card hover state */
-    .card:hover {
-      box-shadow: 0 6px 20px rgba(0,0,0,0.09);
-      transform: translateY(-2px);
-    }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,0.35); }
 
-    .card.red   { border-left: 6px solid #dc2626; }
-    .card.amber { border-left: 6px solid #f59e0b; }
-    .card.green { border-left: 6px solid #16a34a; }
-    .card.grey  { border-left: 6px solid #6b7280; }
+    .card.red   { border-left-color: var(--red);   }
+    .card.amber { border-left-color: var(--amber);  }
+    .card.green { border-left-color: var(--green);  }
+    .card.grey  { border-left-color: var(--grey);   }
+
+    .card.red:hover   { border-color: var(--red);   }
+    .card.amber:hover { border-color: var(--amber);  }
+    .card.green:hover { border-color: var(--green);  }
+    .card.grey:hover  { border-color: var(--grey);   }
 
     .card-top {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       gap: 12px;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
     }
 
     .job-name {
-      font-size: 20px;
-      font-weight: bold;
-      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
     }
 
     .status-pill {
-      border-radius: 999px;
-      padding: 8px 12px;
-      font-size: 12px;
-      font-weight: bold;
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 700;
       text-transform: uppercase;
+      letter-spacing: 0.06em;
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
-    .status-pill.red   { background: #fee2e2; color: #991b1b; }
-    .status-pill.amber { background: #fef3c7; color: #92400e; }
-    .status-pill.green { background: #dcfce7; color: #166534; }
-    .status-pill.grey  { background: #e5e7eb; color: #374151; }
+    .status-pill.red   { background: var(--red-bg);   color: var(--red-text);   }
+    .status-pill.amber { background: var(--amber-bg); color: var(--amber-text); }
+    .status-pill.green { background: var(--green-bg); color: var(--green-text); }
+    .status-pill.grey  { background: var(--grey-bg);  color: var(--grey-text);  }
 
-    .line {
-      margin: 6px 0;
-      font-size: 15px;
-      line-height: 1.5;
+    .card-week {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 14px;
     }
 
-    .label {
-      font-weight: bold;
+    .card-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 24px;
     }
+
+    .field-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .field-value {
+      font-size: 14px;
+      line-height: 1.4;
+      color: var(--secondary);
+    }
+
+    .field.full { grid-column: 1 / -1; }
 
     .empty {
-      background: white;
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 18px;
-      color: #6b7280;
+      padding: 40px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 15px;
     }
 
     @media (max-width: 640px) {
-      body { padding: 12px; }
-
-      .topbar,
-      .card,
-      .empty { padding: 16px; }
-
-      h1 { font-size: 24px; }
-
-      .job-name { font-size: 18px; }
-
-      .card-top {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .search-wrap {
-        max-width: 100%;
-      }
+      body { padding: 12px 12px 32px; }
+      .topbar { padding: 18px; }
+      .card   { padding: 16px; }
+      h1      { font-size: 20px; }
+      .card-fields { grid-template-columns: 1fr; }
+      .controls    { flex-direction: column; align-items: stretch; }
+      .search-wrap { max-width: 100%; }
+      .card-top    { flex-direction: column; }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="topbar">
-      <h1>K&amp;K Industries Hub</h1>
+      <div class="brand">
+        <div class="brand-mark">K&amp;K</div>
+        <h1>Industries Hub</h1>
+      </div>
       <div class="sub">Weekly site position across active jobs</div>
 
       <div class="counts" id="counts"></div>
 
-      <div class="filters">
-        <button class="active" onclick="setFilter('all', this)">All</button>
-        <button onclick="setFilter('red', this)">🔴 At Risk</button>
-        <button onclick="setFilter('amber', this)">🟡 Watch</button>
-        <button onclick="setFilter('green', this)">🟢 On Track</button>
-        <button onclick="setFilter('grey', this)">⚪ Blind Spots</button>
-      </div>
-
-      <div class="search-wrap">
-        <input
-          class="search"
-          type="text"
-          id="searchInput"
-          placeholder="Search jobs..."
-          oninput="setSearch(this.value)"
-        />
-        <button class="search-clear" id="searchClear" onclick="clearSearch()" title="Clear search">✕</button>
+      <div class="controls">
+        <div class="filters">
+          <button class="active" onclick="setFilter('all', this)">All</button>
+          <button onclick="setFilter('red', this)">🔴 At Risk</button>
+          <button onclick="setFilter('amber', this)">🟡 Watch</button>
+          <button onclick="setFilter('green', this)">🟢 On Track</button>
+          <button onclick="setFilter('grey', this)">⚪ Blind Spots</button>
+        </div>
+        <div class="search-wrap">
+          <input class="search" type="text" id="searchInput" placeholder="Search jobs..." oninput="setSearch(this.value)" />
+          <button class="search-clear" id="searchClear" onclick="clearSearch()" title="Clear">✕</button>
+        </div>
       </div>
     </div>
 
@@ -252,15 +337,10 @@
     let currentFilter = "all";
     let currentSearch = "";
 
-    function niceStatus(status) {
-      if (status === "red")   return "At Risk";
-      if (status === "amber") return "Watch";
-      if (status === "green") return "On Track";
-      if (status === "grey")  return "Blind Spot";
-      return status;
+    function niceStatus(s) {
+      return { red:"At Risk", amber:"Watch", green:"On Track", grey:"Blind Spot" }[s] || s;
     }
 
-    // FIX: Pass button element, remove active from all, apply to clicked
     function setFilter(filter, btn) {
       currentFilter = filter;
       document.querySelectorAll(".filters button").forEach(b => b.classList.remove("active"));
@@ -270,12 +350,10 @@
 
     function setSearch(value) {
       currentSearch = value.toLowerCase().trim();
-      // FIX: Show/hide clear button
       document.getElementById("searchClear").classList.toggle("visible", value.length > 0);
       renderJobs();
     }
 
-    // FIX: Clear search function
     function clearSearch() {
       const input = document.getElementById("searchInput");
       input.value = "";
@@ -289,7 +367,7 @@
       const jobsWrap = document.getElementById("jobs");
       jobsWrap.innerHTML = "";
 
-      const filteredJobs = jobs.filter(job => {
+      const filtered = jobs.filter(job => {
         const filterMatch = currentFilter === "all" || job.status === currentFilter;
         const searchMatch =
           job.name.toLowerCase().includes(currentSearch) ||
@@ -298,56 +376,71 @@
         return filterMatch && searchMatch;
       });
 
-      if (filteredJobs.length === 0) {
+      if (filtered.length === 0) {
         jobsWrap.innerHTML = `<div class="empty">No jobs match this filter.</div>`;
-        updateCounts(filteredJobs);
+        updateCounts(filtered);
         return;
       }
 
-      filteredJobs.forEach(job => {
+      filtered.forEach(job => {
         const card = document.createElement("a");
         card.className = "card " + job.status;
         card.href = "jobs/job.html?id=" + job.id;
-
         card.innerHTML = `
           <div class="card-top">
-            <h2 class="job-name">${job.name}</h2>
+            <div class="job-name">${job.name}</div>
             <div class="status-pill ${job.status}">${niceStatus(job.status)}</div>
           </div>
-          <div class="line"><span class="label">Issue:</span> ${job.issue}</div>
-          <div class="line"><span class="label">Labour:</span> ${job.labour}</div>
-          <div class="line"><span class="label">Holding Up:</span> ${job.holdingUp}</div>
-          <div class="line"><span class="label">Next:</span> ${job.next}</div>
+          <div class="card-week">${job.week || ""}</div>
+          <div class="card-fields">
+            <div class="field">
+              <div class="field-label">Issue</div>
+              <div class="field-value">${job.issue}</div>
+            </div>
+            <div class="field">
+              <div class="field-label">Labour</div>
+              <div class="field-value">${job.labour}</div>
+            </div>
+            <div class="field">
+              <div class="field-label">Holding Up</div>
+              <div class="field-value">${job.holdingUp}</div>
+            </div>
+            <div class="field full">
+              <div class="field-label">Next</div>
+              <div class="field-value">${job.next}</div>
+            </div>
+          </div>
         `;
-
         jobsWrap.appendChild(card);
       });
 
-      updateCounts(filteredJobs);
+      updateCounts(filtered);
     }
 
-    // FIX: Counts now reflect filtered view with totals shown separately
-    function updateCounts(filteredJobs) {
-      const total  = jobs.length;
-      const red    = jobs.filter(j => j.status === "red").length;
-      const amber  = jobs.filter(j => j.status === "amber").length;
-      const grey   = jobs.filter(j => j.status === "grey").length;
-      const fCount = filteredJobs ? filteredJobs.length : total;
+    function updateCounts(filtered) {
+      const total = jobs.length;
+      const red   = jobs.filter(j => j.status === "red").length;
+      const amber = jobs.filter(j => j.status === "amber").length;
+      const green = jobs.filter(j => j.status === "green").length;
+      const grey  = jobs.filter(j => j.status === "grey").length;
+      const shown = filtered ? filtered.length : total;
+      const el = document.getElementById("counts");
 
-      let countsEl = document.getElementById("counts");
+      const dots = `
+        <div class="count-item"><div class="count-dot red"></div><span class="count-num">${red}</span>&nbsp;At Risk</div>
+        <div class="count-item"><div class="count-dot amber"></div><span class="count-num">${amber}</span>&nbsp;Watch</div>
+        <div class="count-item"><div class="count-dot green"></div><span class="count-num">${green}</span>&nbsp;On Track</div>
+        <div class="count-item"><div class="count-dot grey"></div><span class="count-num">${grey}</span>&nbsp;Blind Spots</div>
+      `;
 
-      if (currentFilter === "all" && !currentSearch) {
-        countsEl.innerHTML =
-          `Jobs: ${total} &nbsp;|&nbsp; At Risk: ${red} &nbsp;|&nbsp; Watch: ${amber} &nbsp;|&nbsp; Blind Spots: ${grey}`;
-      } else {
-        countsEl.innerHTML =
-          `Showing ${fCount} of ${total} jobs` +
-          `<span class="counts-total"> &nbsp;(Total — At Risk: ${red} | Watch: ${amber} | Blind Spots: ${grey})</span>`;
-      }
+      el.innerHTML = (currentFilter === "all" && !currentSearch)
+        ? dots
+        : `<div class="count-item">Showing <span class="count-num">&nbsp;${shown}&nbsp;</span> of ${total}</div>` + dots;
     }
 
     renderJobs();
   </script>
 </body>
 </html>
+
 
